@@ -1,9 +1,9 @@
-" File: tab_alternate.vim
+" File: php_check.vim
 " Author: Olivier El Mekki
 " Email: olivier@el-mekki.com
-" Description: script allow to switch to the last seen tab, as the screen C-a a
+" Description: php syntax checks the buffer
 " Usage:
-"   :Tabalter - go to the last seen tab
+"   :PHPCheck - lauch the syntax check
 
 if exists('php_check_plugin')
     finish
