@@ -1,0 +1,9 @@
+-------------
+Tab alternate
+-------------
+
+Let you switch to the last seen tab, as C-a C-a in screen.
+
+The default map is C-p. It works in normal mode as well as
+insert mode.
+
