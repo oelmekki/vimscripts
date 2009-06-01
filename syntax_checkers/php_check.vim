@@ -47,5 +47,3 @@ endfunction
 
 
 command! PHPCheck call s:PHPCheck()
-nnoremap <C-c> :PHPCheck<CR>
-inoremap <C-c> <esc>:PHPCheck<CR>

@@ -7,12 +7,45 @@ Let you switch to the last seen tab, as C-a C-a in screen.
 The default map is C-p. It works in normal mode as well as
 insert mode.
 
--------------
-PHP Check
--------------
+---------------
+Syntax checkers
+---------------
 
-Launch php -l on the current buffer. 
+PHPCheck, RUBYCheck, JSCheck
 
-The default map is C-c. It works in normal mode as well as
-insert mode.
+Launch syntax check on the current buffer. 
+
+Code duplication is assumed, for you can choose only what you need.
+
+There is no more default binding, use the ones you want. A possible
+binding management is to assign syntax check on the same binding,
+depending of file type detection :
+
+func SyntaxCheck( lang )
+  if a:lang == 'php' 
+    nnoremap <C-c> :PHPCheck<CR>
+    inoremap <C-c> <esc>:PHPCheck<CR>
+
+  elseif a:lang == 'ruby'
+    nnoremap <C-c> :RUBYCheck<CR>
+    inoremap <C-c> <esc>:RUBYCheck<CR>
+
+  elseif a:lang == 'js'
+    nnoremap <C-c> :JSCheck<CR>
+    inoremap <C-c> <esc>:JSCheck<CR>
+  endif
+endfunction
+
+autocmd FileType php  call SyntaxCheck( 'php' )
+autocmd FileType ruby call SyntaxCheck( 'ruby' )
+autocmd FileType javascript call SyntaxCheck( 'js' )
+
+-----------
+Third party
+-----------
+
+php_check and ruby_check depends on their language interpreter.
+
+js_check depends on Rhino ( http://www.mozilla.org/rhino/ ) and
+provide jslint.js ( http://www.jslint.com/ ).
 
