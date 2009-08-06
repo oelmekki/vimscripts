@@ -40,6 +40,24 @@ autocmd FileType php  call SyntaxCheck( 'php' )
 autocmd FileType ruby call SyntaxCheck( 'ruby' )
 autocmd FileType javascript call SyntaxCheck( 'js' )
 
+
+---------
+Typolight
+---------
+
+Set of functions to help while coding for Typolight.
+
+Those functions are to be used when writing some dca file.
+
+DCAtext       :   create a text conf field 
+DCAselect     :   create a select conf field
+DCAfiletree   :   create an eFileTree conf field ( from framework module )
+DCArte        :   create textarea conf field with tinyMCE
+DCAm2m        :   create a manyToMany conf field ( from framework module )
+DCAdate       :   create a date conf field
+
+( framework module can be found at http://github.com/oelmekki/typolight_framework/tree/master )
+
 -----------
 Third party
 -----------
