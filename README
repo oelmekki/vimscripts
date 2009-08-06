@@ -47,14 +47,20 @@ Typolight
 
 Set of functions to help while coding for Typolight.
 
+Those functions write some file skeleton :
+
+TLdca <tablename>                   : create a DCA file
+TLmodel <class_name> <table_name>   : create an EModel file ( from framework )
+TLcontroller <class_name>           : create a RoutedModule file ( from framework )
+
 Those functions are to be used when writing some dca file.
 
-DCAtext       :   create a text conf field 
-DCAselect     :   create a select conf field
-DCAfiletree   :   create an eFileTree conf field ( from framework module )
-DCArte        :   create textarea conf field with tinyMCE
-DCAm2m        :   create a manyToMany conf field ( from framework module )
-DCAdate       :   create a date conf field
+DCAtext <field_name>      :   create a text conf field 
+DCAselect <field_name>    :   create a select conf field
+DCAfiletree <field_name>  :   create an eFileTree conf field ( from framework module )
+DCArte <field_name>       :   create textarea conf field with tinyMCE
+DCAm2m <field_name>       :   create a manyToMany conf field ( from framework module )
+DCAdate <field_name>      :   create a date conf field
 
 ( framework module can be found at http://github.com/oelmekki/typolight_framework/tree/master )
 

@@ -20,93 +20,93 @@ function! s:guessTableName()
 endfunction
 
 
-function! s:DCAtext( fieldname )
-  let l:block = []
-  call add( l:block, "                '" . a:fieldname . "' => array" )
-  call add( l:block, "                (" )
-  call add( l:block, "                        'label'                   => &$GLOBALS['TL_LANG']['" . s:guessTableName() . "']['" . a:fieldname . "']," )
-  call add( l:block, "                        'exclude'                 => true," )
-  call add( l:block, "                        'inputType'               => 'text'," )
-  call add( l:block, "                        'eval'                    => array('mandatory'=>true, 'maxlength'=>255)" )
-  call add( l:block, "                )," )
-  call append( line('.'), l:block )
-endfunction
 
+function! s:findTplPath( name )
+  let l:runtime_paths = split( &rtp, ',' )
 
-function! s:DCAselect( fieldname )
-  let l:block = []
-  call add( l:block, "                '" . a:fieldname . "' => array" )
-  call add( l:block, "                (" )
-  call add( l:block, "                        'label'                   => &$GLOBALS['TL_LANG']['" . s:guessTableName() . "']['" . a:fieldname . "']," )
-  call add( l:block, "                        'exclude'                 => true," )
-  call add( l:block, "                        'inputType'               => 'select'," )
-  call add( l:block, "                        'options'                 => array()," )
-  call add( l:block, "                        'options_callback'        => ''," )
-  call add( l:block, "                        'foreignKey'              => ''," )
-  call add( l:block, "                        'eval'                    => array('mandatory'=>true, 'multiple'=> false)" )
-  call add( l:block, "                )," )
-  call append( line('.'), l:block )
-endfunction
+  for l:path in l:runtime_paths
+    let l:guess = l:path . '/plugin/typolight_templates/' . a:name . '.tpl'
+    if filereadable( l:guess )
+      return l:guess
+    endif
+  endfor
 
-
-function! s:DCAfiletree( fieldname )
-  let l:block = []
-  call add( l:block, "                '" . a:fieldname . "' => array" )
-  call add( l:block, "                (" )
-  call add( l:block, "                        'label'                   => &$GLOBALS['TL_LANG']['" . s:guessTableName() . "']['" . a:fieldname . "']," )
-  call add( l:block, "                        'exclude'                 => true," )
-  call add( l:block, "                        'inputType'               => 'eFileTree'," )
-  call add( l:block, "                        'eval'                    => array('mandatory'=>true, 'fieldType' => 'radio', 'files' => true,  'path' => 'tl_files/')" )
-  call add( l:block, "                )," )
-  call append( line('.'), l:block )
-endfunction
-
-
-function! s:DCArte( fieldname )
-  let l:block = []
-  call add( l:block, "                '" . a:fieldname . "' => array" )
-  call add( l:block, "                (" )
-  call add( l:block, "                        'label'                   => &$GLOBALS['TL_LANG']['" . s:guessTableName() . "']['" . a:fieldname . "']," )
-  call add( l:block, "                        'exclude'                 => true," )
-  call add( l:block, "                        'inputType'               => 'textarea'," )
-  call add( l:block, "                        'eval'                    => array('mandatory'=>true, 'rte'=> 'tinyMCE')" )
-  call add( l:block, "                )," )
-  call append( line('.'), l:block )
-endfunction
-
-
-function! s:DCAm2m( fieldname )
-  let l:block = []
-  call add( l:block, "                '" . a:fieldname . "' => array" )
-  call add( l:block, "                (" )
-  call add( l:block, "                        'label'                   => &$GLOBALS['TL_LANG']['" . s:guessTableName() . "']['" . a:fieldname . "']," )
-  call add( l:block, "                        'exclude'                 => true," )
-  call add( l:block, "                        'inputType'               => 'manyToManyCheckbox'," )
-  call add( l:block, "                        'foreignKey'              => ''," )
-  call add( l:block, "                        'eval'                    => array('mandatory'=>true, 'thisModel' => '', 'thatModel' => '', 'multiple' => true)," )
-  call add( l:block, "                )," )
-  call append( line('.'), l:block )
-endfunction
-
-
-function! s:DCAdate( fieldname )
-  let l:block = []
-  call add( l:block, "                '" . a:fieldname . "' => array" )
-  call add( l:block, "                (" )
-  call add( l:block, "                        'label'                   => &$GLOBALS['TL_LANG']['" . s:guessTableName() . "']['" . a:fieldname . "']," )
-  call add( l:block, "                        'exclude'                 => true," )
-  call add( l:block, "                        'inputType'               => 'text'," )
-  call add( l:block, "                        'eval'                    => array('rgxp'=>'date', 'datepicker'=>$this->getDatePickerString(), 'tl_class'=>'w50 wizard')" )
-  call add( l:block, "" )
-  call add( l:block, "                )," )
-  call append( line('.'), l:block )
+  return 'undefined'
 endfunction
 
 
 
-com! -nargs=1 DCAtext call s:DCAtext("<args>")
-com! -nargs=1 DCAselect call s:DCAselect("<args>")
-com! -nargs=1 DCAfiletree call s:DCAfiletree("<args>")
-com! -nargs=1 DCArte call s:DCArte("<args>")
-com! -nargs=1 DCAm2m call s:DCAm2m("<args>")
-com! -nargs=1 DCAdate call s:DCAdate("<args>")
+function! s:TLdca( tablename )
+  let l:lines = readfile( s:findTplPath( 'dca' ) )
+  let l:dest  = []
+
+  for l:line in l:lines
+    call add( l:dest, substitute( l:line, 'CARBON', a:tablename, '' ) )
+  endfor
+
+  call append( line( '0' ), l:dest )
+endfunction
+
+
+
+function! s:TLmodel( args )
+  let l:names = split( a:args, ' ' )
+  let l:modelname = l:names[0]
+  let l:tablename = l:names[1]
+
+  let l:lines = readfile( s:findTplPath( 'emodel' ) )
+  let l:dest  = []
+
+  for l:line in l:lines
+    let l:line = substitute( l:line, 'TABLE_NAME', l:tablename, '' ) 
+    let l:line = substitute( l:line, 'MODEL_NAME', l:modelname, '' ) 
+    call add( l:dest, l:line )
+  endfor
+
+  call append( line( '0' ), l:dest )
+endfunction
+
+
+
+function! s:TLcontroller( controllername )
+  let l:lines = readfile( s:findTplPath( 'controller' ) )
+  let l:dest  = []
+
+  for l:line in l:lines
+    let l:line = substitute( l:line, 'CONTROLLER_NAME', a:controllername, '' ) 
+    let l:line = substitute( l:line, 'CONTROLLER_PREFIX', tolower( a:controllername ), '' ) 
+    call add( l:dest, l:line )
+  endfor
+
+  call append( line( '0' ), l:dest )
+endfunction
+
+
+
+function! s:DCAfield( inputname, fieldname )
+  let l:lines = readfile( s:findTplPath( a:inputname ) )
+  let l:dest  = []
+  let l:tablename = s:guessTableName()
+
+  for l:line in l:lines
+    let l:line = substitute( l:line, 'TABLE_NAME', l:tablename, '' ) 
+    let l:line = substitute( l:line, 'CARBON', a:fieldname, '' ) 
+    call add( l:dest, l:line )
+  endfor
+
+  call append( line( '.' ), l:dest )
+endfunction
+
+
+
+
+com! -nargs=1 DCAtext call s:DCAfield( 'dca_text', "<args>" )
+com! -nargs=1 DCAselect call s:DCAfield( 'dca_select', "<args>" )
+com! -nargs=1 DCAfiletree call s:DCAfield( 'dca_filetree', "<args>" )
+com! -nargs=1 DCArte call s:DCAfield( 'dca_rte', "<args>" )
+com! -nargs=1 DCAm2m call s:DCAfield( 'dca_m2m', "<args>" )
+com! -nargs=1 DCAdate call s:DCAfield( 'dca_date', "<args>" )
+
+com! -nargs=1 TLdca call s:TLdca("<args>")
+com! -nargs=1 TLmodel call s:TLmodel("<args>")
+com! -nargs=1 TLcontroller call s:TLcontroller("<args>")
