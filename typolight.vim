@@ -83,6 +83,19 @@ endfunction
 
 
 
+function! s:TLlangDca( tablename )
+  let l:lines = readfile( s:findTplPath( 'langDca' ) )
+  let l:dest  = []
+
+  for l:line in l:lines
+    call add( l:dest, substitute( l:line, 'CARBON', a:tablename, '' ) )
+  endfor
+
+  call append( line( '0' ), l:dest )
+endfunction
+
+
+
 function! s:DCAfield( inputname, fieldname )
   let l:lines = readfile( s:findTplPath( a:inputname ) )
   let l:dest  = []
@@ -110,3 +123,4 @@ com! -nargs=1 DCAdate call s:DCAfield( 'dca_date', "<args>" )
 com! -nargs=1 TLdca call s:TLdca("<args>")
 com! -nargs=1 TLmodel call s:TLmodel("<args>")
 com! -nargs=1 TLcontroller call s:TLcontroller("<args>")
+com! -nargs=1 TLlangDca call s:TLlangDca("<args>")

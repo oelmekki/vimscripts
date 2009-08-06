@@ -49,9 +49,10 @@ Set of functions to help while coding for Typolight.
 
 Those functions write some file skeleton :
 
-TLdca <tablename>                   : create a DCA file
+TLdca <table_name>                  : create a DCA file
 TLmodel <class_name> <table_name>   : create an EModel file ( from framework )
 TLcontroller <class_name>           : create a RoutedModule file ( from framework )
+TLlangDca <table_name>              : create a lang file for DCA
 
 Those functions are to be used when writing some dca file.
 
