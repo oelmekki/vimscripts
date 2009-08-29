@@ -119,6 +119,7 @@ com! -nargs=1 DCAfiletree call s:DCAfield( 'dca_filetree', "<args>" )
 com! -nargs=1 DCArte call s:DCAfield( 'dca_rte', "<args>" )
 com! -nargs=1 DCAm2m call s:DCAfield( 'dca_m2m', "<args>" )
 com! -nargs=1 DCAdate call s:DCAfield( 'dca_date', "<args>" )
+com! -nargs=1 DCAcheckbox call s:DCAfield( 'dca_checkbox', "<args>" )
 
 com! -nargs=1 TLdca call s:TLdca("<args>")
 com! -nargs=1 TLmodel call s:TLmodel("<args>")
